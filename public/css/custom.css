@@ -1,0 +1,85 @@
+    .validation_error
+{
+    color: #FF0000;
+}
+.error
+{
+    color: red;
+    width: 100%
+}
+#back
+{
+    float: right;
+}
+.text-red
+{
+    color: red;
+}
+.action-text-left
+{
+    width: 10%
+}
+.id-text-left
+{
+    width: 4%
+}
+.bootstrap-table table.table-bordered tr {
+    border-color: #ffffff !important;
+}
+.card-body
+{
+    box-shadow: 0 1px 1px rgb(0 0 0 / 10%) !important;
+}
+.select2-container .select2-selection--multiple .select2-selection__choice {
+    color: #646262 !important;
+}
+.with-border
+{
+    border-bottom: 1px solid #f4f4f4;
+}
+.page-item.active .page-link {
+    background-color: #696b6c;
+}
+.pull-right
+{
+    text-align: right;
+}
+.form-pull-right
+{
+    float: right;
+    display: inline-flex;
+}
+.logo-box .logo {
+    line-height: 0px !important;
+}
+.logo span.logo-lg {
+    display: block;
+    margin-top: 23px;
+}
+#submit_btn
+{
+    float: right;
+}
+
+.select2-container .select2-selection--multiple {
+    min-height: 37px;
+}
+.logo span.logo-sm{
+margin-top:20px;
+}
+
+#wrapper {
+    height: auto !important;
+}
+.up_btn
+{
+    background-color: #e0e0e0;
+    margin-bottom: 30px;
+}
+.down_btn
+{
+    background-color: #e0e0e0;
+}
+.multipleselect{
+    flex-wrap: unset;
+}
