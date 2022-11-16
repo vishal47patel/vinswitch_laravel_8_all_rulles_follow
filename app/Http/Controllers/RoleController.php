@@ -26,7 +26,7 @@ class RoleController extends Controller
                 $query->Where('name', 'like', '%'.request('search').'%');
             });
         }
-
+        $roles = $this->getSearch($roles);
         $roles = $roles->paginate($row); //display 10 records
         $operationPermission = [
             'create' => hasPermission(['role_list','role_create']),
@@ -89,5 +89,13 @@ class RoleController extends Controller
         $role = Role::find($id)->delete();
         return redirect()->route('roles.index')
                         ->with('success','Role deleted successfully');
+    }
+
+    private function getSearch($query)
+    {
+        if ( request('name') != '' )
+        $query = $query->where('name', 'like', '%'.request('name').'%');
+        
+        return $query; 
     }
 }

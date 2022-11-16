@@ -9,6 +9,7 @@ use App\Models\FailedRateFiles;
 use App\Http\Requests\SofiaRateStoreRequest;
 use App\Http\Requests\SofiaRateImportRequest;
 use Illuminate\Support\Facades\DB;
+use Session;
 
 class SofiaRateController extends Controller
 {
@@ -24,12 +25,18 @@ class SofiaRateController extends Controller
             $SofiaRates = $SofiaRates->search(request('search'), null, true, true)->distinct();
         }
 
+        $SofiaRates = $this->getSearch($SofiaRates);  
+
         $SofiaRates = $SofiaRates->paginate($row); //display 10 records
         $operationPermission = [
             'create' => hasPermission(['termination_rate_list','termination_rate_create']),
             'update' => hasPermission(['termination_rate_list','termination_rate_update']),
             'delete' => hasPermission(['termination_rate_list','termination_rate_delete'])
-        ]; 
+        ];
+
+        if(isset($id) && !empty($id)){
+            Session::put('RateData', $id);
+        } 
 
         $FailedRateFiles = FailedRateFiles::where('rateplan_id','=',$id)->orderBy('id', 'DESC')->get();
 
@@ -190,17 +197,19 @@ class SofiaRateController extends Controller
         return response()->download($filePath, $fileName, $headers);
     }
 
-    public function rate_export()
-    {    
-        $headers = [
+    public function rate_export($id)
+    {   
+
+      $plan = SofiaRateplan::where('id','=',$id)->first();
+      $headers = [
       'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',   
       'Content-type'  => 'text/csv',   
-      'Content-Disposition' => 'attachment; filename="sofiarate.csv"',  
+      'Content-Disposition' => 'attachment; filename="Termination-Rates-' . date("Ymd").'_'.$plan->plan_name .'.csv"',  
       'Expires' => '0',  
       'Pragma'  => 'public'
       ];
-              
-      $sofiarates = DB::select("SELECT `code`,`description`,`buy_rate` FROM `sofia_rate`;");
+
+      $sofiarates = SofiaRate::select('code','description','buy_rate')->where('plan_id','=',$id)->orderBy('id', 'DESC')->get();
 
       if(isset($sofiarates) && !empty($sofiarates))
       {
@@ -233,5 +242,16 @@ class SofiaRateController extends Controller
         $file = FailedRateFiles::select('rateplan_id')->where('id','=',$id)->first();
         $FailedRateFiles = FailedRateFiles::where('id','=',$id)->delete();
         return redirect()->route('sofiaRate.index',$file->rateplan_id)->with('success','Failed Rate plan file has been deleted successfully');
+    }
+
+    private function getSearch($query)
+    {
+        if ( request('description') != '' )
+        $query = $query->where('description', 'like', '%'.request('description').'%');
+
+        if ( request('code') != '' )
+        $query = $query->where('code', 'like', '%'.request('code').'%');
+    
+        return $query; 
     }
 }

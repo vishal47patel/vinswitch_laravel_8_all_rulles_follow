@@ -10,7 +10,7 @@
                     <!-- header start-->
                     <div class="row with-border mb-2">
                         <div class="col-md-6">
-                             <h4 class="page-title"><i class="fa fa-paste" aria-hidden="true"></i>  Add New NPA/NXX</h4>
+                             <h4 class="page-title"><i class="fa fa-paste" aria-hidden="true"></i>  Add NPA/NXX</h4>
                         </div>
                          <div class="col-md-6 pull-right mb-1">
                             <a class="btn btn-primary" href="{{ route('npaNxxMaster.index') }}"><i class="fa fa-arrow-left"></i></a>
@@ -41,7 +41,7 @@
                                 @error('isdefault')<p class="validation_error">{{ $message }} </p>@enderror
                             </div>
                         </div>
-                        <button class="btn btn-primary" type="submit">Submit</button>
+                        <button class="btn btn-primary float-end" type="submit">Add</button>
                     </form>
                         
                 </div> 

@@ -15,6 +15,7 @@ class SofiaRate extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'id',
         'plan_id',
         'rate_name',
         'code',

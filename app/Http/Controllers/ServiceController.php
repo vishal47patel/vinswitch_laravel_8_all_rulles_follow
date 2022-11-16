@@ -27,6 +27,8 @@ class ServiceController extends Controller
             $services = $services->search(request('search'), null, true, true)->distinct();
         }
 
+        $services = $this->getSearch($services);  
+
         $services = $services->paginate($row); //display 10 records
         $operationPermission = [
             'create' => hasPermission(['service_list','service_create']),
@@ -101,5 +103,12 @@ class ServiceController extends Controller
         $service = Service::find($id)->delete();
         return redirect()->route('services.index')
                         ->with('success','service deleted successfully');
+    }
+    private function getSearch($query)
+    {
+        if ( request('service_type') != '' )
+        $query = $query->where('service_type', 'like', '%'.request('service_type').'%');
+
+        return $query; 
     }
 }

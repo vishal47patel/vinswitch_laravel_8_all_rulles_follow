@@ -1,5 +1,9 @@
 <?php
+namespace App\Libraries;
 
+use Exception;
+
+namespace App\Libraries;
 /**
  * LoginForm class.
  * LoginForm is the data structure for keeping
@@ -73,38 +77,43 @@ class EventSocket
 		if ($port == '') { $port = '8021'; }
 		if ($password == '') { $password = 'ClueCon'; }
 
-		$fp = fsockopen($host, $port, $errno, $errdesc, 2);
+		try {
+			$fp = fsockopen($host, $port, $errno, $errdesc, 2);
 
-		if (!$fp) {
-			return false;
-		}
-
-		socket_set_blocking($fp, false);
-		$this->fp = $fp;
-
-		// Wait auth request and send response
-			while (!feof($fp)) {
-				$event = $this->read_event();
-				if(@$event['Content-Type'] == 'auth/request'){
-					fputs($fp, "auth $password\n\n");
-					break;
-				}
+			if (!$fp) {
+				return false;
 			}
-
-		// Wait auth response
-			while (!feof($fp)) {
-				$event = $this->read_event();
-				if (@$event['Content-Type'] == 'command/reply') {
-					if (@$event['Reply-Text'] == '+OK accepted') {
-						return $fp;
+	
+			socket_set_blocking($fp, false);
+			$this->fp = $fp;
+	
+			// Wait auth request and send response
+				while (!feof($fp)) {
+					$event = $this->read_event();
+					if(@$event['Content-Type'] == 'auth/request'){
+						fputs($fp, "auth $password\n\n");
+						break;
 					}
-					$this->fp = false;
-					fclose($fp);
-					return false;
 				}
-			}
-
-		return false;
+	
+			// Wait auth response
+				while (!feof($fp)) {
+					$event = $this->read_event();
+					if (@$event['Content-Type'] == 'command/reply') {
+						if (@$event['Reply-Text'] == '+OK accepted') {
+							return $fp;
+						}
+						$this->fp = false;
+						fclose($fp);
+						return false;
+					}
+				}
+	
+			return false;    
+        } catch (Exception $e) {
+            return false;    
+        } 
+		
 	}
 
 	public function request($cmd) {

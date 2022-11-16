@@ -24,6 +24,7 @@ class BillPlanController extends Controller
         if (request('search') != '') {
             $billplans = $billplans->search(request('search'), null, true, true)->distinct();
         }
+        $billplans = $this->getSearch($billplans);  
 
         $billplans = $billplans->paginate($row); //display 10 records
         $operationPermission = [
@@ -45,14 +46,14 @@ class BillPlanController extends Controller
         $input = $request->except(['_token','_method']);
         $input['monthly_mins'] = General::calculateMin2Sec($request->monthly_mins);
         $billplan = BillPlan::create($input);
-        $billplan->billplans()->attach($request->rateplan_id);
+        $billplan->sofiarateplans()->attach($request->rateplan_id);
 
         return redirect()->route('billPlan.index')->with('success','Termination bill plan has been created successfully!');
     }
     public function edit($id)
     {   
         $billplans = BillPlan::findorfail($id);
-        $sofiarateplans = SofiaRateplan::get();
+        $sofiarateplans = SofiaRateplan::where('status','=','ACTIVE')->get();
 
         $sofia_rate_plan_list = array_map( function ($sofiarate) { 
             return $sofiarate['id'];
@@ -67,7 +68,7 @@ class BillPlanController extends Controller
         $input['modified_at'] = date("Y-m-d H:i:s");
         $billplan = BillPlan::where('id',$id)->first();
         $billplan->update($input);
-        $billplan->billplans()->sync($request->rateplan_id);
+        $billplan->sofiarateplans()->sync($request->rateplan_id);
 
         if(isset($request->apply_changes) && $request->apply_changes == "YES")
         {
@@ -93,5 +94,19 @@ class BillPlanController extends Controller
         $billplan->status = $billplan->status == "INACTIVE" ? "ACTIVE" : "INACTIVE";
         $billplan->save();
         return redirect()->route('billPlan.index');
+    }
+
+    private function getSearch($query)
+    {
+        if ( request('name') != '' )
+        $query = $query->where('name', 'like', '%'.request('name').'%');
+
+        if ( request('type') != '' )
+        $query = $query->where('type', 'like', '%'.request('type').'%');
+        
+        if ( request('status') != '' )
+        $query = $query->where('status', 'like', '%'.request('status').'%');
+        
+        return $query; 
     }
 }

@@ -55,6 +55,7 @@
                                 </div>
                                 @error('email')<p class="validation_error">{{ $message }}</p> @enderror
                             </div>
+                            <input name='id' value="{{Auth::user()->id}}" hidden >
 
                         </div>
                         <button class="btn btn-primary" type="submit" id="submit_btn">Submit</button>

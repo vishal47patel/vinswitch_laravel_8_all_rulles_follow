@@ -22,24 +22,31 @@
                     <form action="{{ route('NpaNxxDetail.store',$id) }}" method="POST" enctype="multipart/form-data" id="check_validation">
                     @csrf
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <label class="form-label">Import File</label>				
-                                <!-- <div class="input-group">
-                                    <span class="input-group-addon log"><i class="fa fa-cloud-upload"></i></span> -->
+                    
+                            <div class="col-lg-6 mb-2 validation_message">
+                                <label for="for-realm" class="form-label">Import File</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-cloud-upload-alt"></i></span>
                                     <input type="file" class="form-control" name="lead_file" id="lead_file">
-                                    @error('lead_file')<p class="validation_error">{{ $message }} </p>@enderror
-                                <!-- </div> -->
+                                </div>
+                                @error('lead_file')<p class="validation_error">{{ $message }} </p>@enderror
                             </div>
-                            <div class="form-group col-md-6">
-                            <label class="form-label">Download sample file</label>		
-                            <br>
-                                <a class="btn btn-block btn-success btn-sm" title="Download" href="{{ route('NpaNxxDetail.downloadfile') }}"><i class="fa fa-download"></i> </a>
+                            <div class="col-lg-6 mb-2 validation_message">
+                                <label for="for-realm" class="form-label">Download sample file</label>
+                                <div class="input-group">                                    
+                                    <a href="{{ route('NpaNxxDetail.downloadfile') }}">
+                                        <span class="input-group-text bg-primary">
+                                            <i class="fas fa-download text-white"></i>
+                                        </span>
+                                    </a>
+                                </div>
                             </div>
 
+
                         </div>
-                        
-                        <button class="btn btn-primary" type="submit">Submit</button>
+                        <button class="btn btn-primary float-end" type="submit">Import</button>
                     </form>
+                    
                     
                 </div>
             </div> 

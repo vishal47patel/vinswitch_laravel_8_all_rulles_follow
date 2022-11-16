@@ -77,7 +77,7 @@
 
                             <div class="col-lg-5 mb-2">
                                 <label for="for-gateway_id" class="form-label">Selected Gateway<span class="text-red"> *</span></label>
-                                    <select class="form-control"  name="gateway_id"  title="Selected Gateway" id="lstBox2" multiple="multiple">
+                                    <select class="form-control"  name="gateway_id[]"  title="Selected Gateway" id="lstBox2" multiple="multiple">
                                     @foreach ($sofiarateplan->sofia_plangateways as $sofia_plangateways)
                                     <option value="{{$sofia_plangateways->id}}" {{ old('gateway_id') == $sofia_plangateways->id ? 'selected' : '' }}>{{$sofia_plangateways->gateway->gateway_name}}</option>
                                     @endforeach
@@ -97,14 +97,31 @@
                             </div>
 
                         </div>
-                        <button class="btn btn-primary" type="submit" id="submit_btn">Submit</button>
+                        <button class="btn btn-primary" type="submit" id="submit_btn" onclick="return selectAll(document.getElementById('lstBox2'),true);">Submit</button>
                     </form>
                         
                 </div> 
             </div> 
         </div>
     </div>
-</div> 
+</div>
+<script type="text/javascript">
+function selectAll(selectBox,selectAll) { 
+// have we been passed an ID 
+if (typeof selectBox == "string") { 
+    selectBox = document.getElementById(selectBox);
+} 
+// is the select box a multiple select box? 
+if (selectBox.type == "select-multiple" && selectBox.options.length!=0) { 
+    for (var i = 0; i < selectBox.options.length; i++) { 
+        selectBox.options[i].selected = selectAll; 
+    }
+    return true;
+}
+       
+return true;
+}
+</script>
 <script src="{{ asset('js/termination_rateplan.js') }}" defer></script>
 @endsection
 <script src="{{ asset('js/validation.js') }}" defer></script>

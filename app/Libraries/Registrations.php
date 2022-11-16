@@ -8,6 +8,7 @@ use Exception;
 
 class Registrations
 {
+    
     public function __destruct()
     {
         foreach ($this as $key => $value) {
@@ -18,15 +19,20 @@ class Registrations
     /**
      * get the registrations
      */
-    public function get($profile, SofiaConf $sofia_conf)
+    public function get($profile)
     {
-
         //initialize the id used in the registrations array
         $id = 0;
-
+        $esl = new SocketConnection;
+        
         //create the event socket connection
-        $fp = $this->_event_socket_create();
+       // $fp = $this->_event_socket_create();
+      
+       $fp = SocketConnection::_event_socket_create();
 
+        $sofia_conf = new SofiaConf;
+      
+        
         if($profile != '' && $profile != 'all')
             $sofia_conf = $sofia_conf->where('profile_name', $profile);
 
@@ -38,11 +44,12 @@ class Registrations
                 //get sofia status profile information including registrations
                 $cmd = "api sofia xmlstatus profile " . $field['profile_name'] . " reg";
 
-                $xml_response1 = $this->_event_socket_request($fp, $cmd);
-
+             //   $xml_response1 = $this->_event_socket_request($fp, $cmd);
+             $xml_response1 = SocketConnection::_event_socket_request($fp, $cmd);
 
                 if ($xml_response1 == "Invalid Profile!") {
-                    $xml_response1 = "<error_msg>" . Yii::t('app', 'Invalid Profile!') . "</error_msg>";
+                    $xml_response1 = "<error_msg>Invalid Profile!</error_msg>";
+                    //$xml_response1 = "<error_msg>" . Yii::t('app', 'Invalid Profile!') . "</error_msg>";
                 }
                 $xml_response1 = str_replace("<profile-info>", "<profile_info>", $xml_response1);
                 $xml_response1 = str_replace("</profile-info>", "</profile_info>", $xml_response1);
@@ -128,28 +135,5 @@ class Registrations
 
         //return the registrations array
         return (isset($registrations)) ? $registrations : array();
-    }
-
-
-    public function _event_socket_create()
-    {
-        $host = config('param.SocketConnection.host');
-        $password = config('param.SocketConnection.password');
-        $port = config('param.SocketConnection.port');
-
-        $esl = new EventSocket();
-        if ($esl->connect($host, $port, $password)) {
-            return $esl->reset_fp();
-        }
-        return false;
-    }
-
-    public function _event_socket_request($fp, $cmd)
-    {
-
-        $esl = new EventSocket($fp);
-        $result = $esl->request($cmd);
-        $esl->reset_fp();
-        return $result;
     }
 }

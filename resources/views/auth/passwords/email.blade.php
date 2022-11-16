@@ -6,7 +6,12 @@
 
     <div class="mb-3">
         <label for="email" class="form-label">Email address</label>
-        <input class="form-control @error('email') is-invalid @enderror" type="email" id="email" placeholder="Enter your email">
+        <input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email" placeholder="Enter your email">
+         @error('email')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+        @enderror
     </div>
 
     <div class="text-center d-grid">

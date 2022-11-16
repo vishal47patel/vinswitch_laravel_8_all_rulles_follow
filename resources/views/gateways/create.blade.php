@@ -13,7 +13,7 @@
                             <h4 class="page-title"><i class="fas fa-paste" aria-hidden="true"></i> Add Gateway Detail</h4>
                         </div>
                         <div class="col-md-6 pull-right mb-1">
-                            <a class="btn btn-primary" href="{{ route('gateways.index') }}"><i class="fa fa-arrow-left"></i></a>
+                            <a class="btn btn-primary" href="{{ route('gateways.index') }}" title="Back"><i class="fa fa-arrow-left"></i></a>
                         </div>
                     </div>
                     <!-- header end-->
@@ -230,7 +230,7 @@
                             </div>
                         </div>
                         
-                        <button class="btn btn-primary float-end" type="submit">Add</button>
+                        <button class="btn btn-primary float-end" type="submit" title="Add Record">Add</button>
                     </form>
 
                 </div>

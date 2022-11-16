@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Libraries\Registrations;
+use App\Libraries\SocketConnection;
 use App\Models\SofiaConf;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use SimpleXMLElement;
 
 class SofiaConfController extends Controller
@@ -16,27 +16,21 @@ class SofiaConfController extends Controller
         if (request('row') != '')
             $row = request('row');
 
-        $record = $sofiaConf->orderBy('id', 'DESC')->get();
+        $record = $sofiaConf->orderBy('id', 'DESC');
 
-        $record = $record->paginate($record);
-
+        $record = $record->paginate($row);
         $operationPermission = [
-            'reload' => hasPermission(['sip_status_list', 'sip_status_reload']),
-            'start' => hasPermission(['sip_status_list', 'sip_status_start']),
-            'stop' => hasPermission(['sip_status_list', 'sip_status_stop']),
-            'restart' => hasPermission(['sip_status_list', 'sip_status_restart']),
-            'rescan' => hasPermission(['sip_status_list', 'sip_status_rescan']),
-            'flush' => hasPermission(['sip_status_list', 'sip_status_flush']),
+            'list' => hasPermission(['sip_status_list']),
         ];
 
         $data = $this->getSofiaStatus();
-        return view('did_numbers.index', compact('record', 'operationPermission', 'data'));
+        return view('sip_status.index', compact('record', 'operationPermission', 'data'));
     }
 
     public function getSofiaStatus()
     {
         // socket connection
-        $obj = new Registrations;
+        $obj = new SocketConnection;
         $fp = $obj->_event_socket_create();
         $responce = [];
         $error = [];
@@ -57,14 +51,62 @@ class SofiaConfController extends Controller
             } catch (Exception $e) {
                 $error[] = $e->getMessage();
             }
-
         }
         $responce['error'] = $error;
         return $responce;
     }
 
-    public function update(Request $request, SofiaConf $sofiaConf)
+    // command run
+    public function cmd($cmd)
     {
-        //
-    }
+        $command = $cmd;
+        $data_process = '';
+        
+        //create the event socket connection
+        $fp = SocketConnection::_event_socket_create();
+        if ($fp) {
+            //if reloadxml then run reloadacl, reloadxml and rescan the external profile for new gateways
+            if ($command == "api reloadxml") {
+                //reloadxml
+                if ($command == "api reloadxml") {
+                    $response = SocketConnection::_event_socket_request($fp, $command);
+                    unset($command);
+                }
+
+                //clear the apply settings reminder
+                $_SESSION["reload_xml"] = false;
+
+                //rescan the external profile to look for new or stopped gateways
+                $command = 'api sofia profile external rescan';
+                $response = SocketConnection::_event_socket_request($fp, $command);
+                unset($command);
+                $data_process = 'Reload XML';
+            }
+
+            //cache flush
+            if ($command == "api cache flush") {
+                $cache = new Cache;
+                $cache->flush();
+                $data_process = 'Flush';
+            }
+
+            //reloadacl
+            if ($command == "api reloadacl") {
+                $response = SocketConnection::_event_socket_request($fp, $command);
+                unset($command);
+                $data_process = 'Reload ACL';
+            }
+
+            //sofia profile
+            $command = $cmd;
+            if (substr($command, 0, 17) == "api sofia profile") {
+                $response = SocketConnection::_event_socket_request($fp, $command);
+            }
+
+            //close the connection
+            fclose($fp);
+        }
+        return redirect()->route('sip.status.index')
+           ->with('success', $data_process.' successfully');
+    }   
 }

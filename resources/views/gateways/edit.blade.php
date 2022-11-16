@@ -14,12 +14,12 @@
                              <h4 class="page-title"><i class="fas fa-paste" aria-hidden="true"></i> Edit Gateway Detail</h4>
                         </div>
                          <div class="col-md-6 pull-right mb-1">
-                            <a class="btn btn-primary" href="{{ route('gateways.index') }}"><i class="fa fa-arrow-left"></i></a>
+                            <a class="btn btn-primary" href="{{ route('gateways.index') }}" title="Back"><i class="fa fa-arrow-left"></i></a>
                         </div>
                     </div>
                     <!-- header end-->
                         
-                    <form action="{{ route('gateways.update',$gateway->id) }}" method="POST" id="check_validation">
+                    <form action="{{ route('aclnodes.update',$gateway->id) }}" method="POST" id="check_validation">
                         @csrf
                         <div class="row">
                             <div class="col-lg-4 mb-2 validation_message ">
@@ -229,7 +229,7 @@
                                 @error('outbound_default')<p class="validation_error">{{ $message }}</p> @enderror
                             </div>
                         </div>
-                        <button class="btn btn-primary float-end" type="submit">Update</button>
+                        <button class="btn btn-primary float-end" type="submit" title="Update Record">Update</button>
                     </form>
                         
                 </div> 
@@ -238,4 +238,4 @@
     </div>
 </div> 
 @endsection
-<script src="{{ asset('js/validation.js') }}" defer></script>
+<script src="{{ asset('js/gateways.js') }}" defer></script>

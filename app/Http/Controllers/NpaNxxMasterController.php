@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Permission;
 use App\Models\NpaNxxMaster;
-use App\Http\Requests\npaNxxMasterStoreRequest;
-use App\Http\Requests\npaNxxMasterUpdateRequest;
+use App\Http\Requests\NpaNxxMasterStoreRequest;
+use App\Http\Requests\NpaNxxMasterUpdateRequest;
 
 class NpaNxxMasterController extends Controller
 {
@@ -27,6 +27,7 @@ class NpaNxxMasterController extends Controller
         if (request('search') != '') {
             $npaNxxMaster = $npaNxxMaster->search(request('search'), null, true, true)->distinct();
         }
+        $npaNxxMaster = $this->getSearch($npaNxxMaster);        
 
         $operationPermission = [
             'create' => hasPermission(['npaNxxMaster_list','npaNxxMaster_create']),
@@ -55,15 +56,15 @@ class NpaNxxMasterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(npaNxxMasterStoreRequest $request)
+    public function store(NpaNxxMasterStoreRequest $request)
     {
         $input = $request->all();
         if(isset( $input['isdefault']) &&  $input['isdefault'] == "YES")
 		{
-            $npaNxxMaster = npaNxxMaster::where('isdefault', '=', "YES")->update(array('isdefault' => "NO"));
+            $npaNxxMaster = NpaNxxMaster::where('isdefault', '=', "YES")->update(array('isdefault' => "NO"));
         }
-        $npaNxxMaster= npaNxxMaster::create($input);
-        return redirect()->route('npaNxxMaster.index')->with('success','npaNxxMaster created successfully.');
+        $npaNxxMaster= NpaNxxMaster::create($input);
+        return redirect()->route('npaNxxMaster.index')->with('success','NpaNxx Master created successfully.');
     }
 
     /**
@@ -74,7 +75,7 @@ class NpaNxxMasterController extends Controller
      */
     public function edit($id)
     {
-        $npaNxxMaster = npaNxxMaster::findorfail($id);
+        $npaNxxMaster = NpaNxxMaster::findorfail($id);
         return view('npaNxxMaster.edit',compact('npaNxxMaster'));
     }
 
@@ -85,23 +86,23 @@ class NpaNxxMasterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(npaNxxMasterUpdateRequest $request, $id)
+    public function update(NpaNxxMasterUpdateRequest $request, $id)
     {
         if(isset( $request['isdefault']) &&  $request['isdefault'] == "YES")
 		{
-            $npaNxxMaster =  npaNxxMaster::where('isdefault', '=', "YES")->update(array('isdefault' => "NO"));
+            $npaNxxMaster =  NpaNxxMaster::where('isdefault', '=', "YES")->update(array('isdefault' => "NO"));
         }
-        $npaNxxMaster = npaNxxMaster::where('id', $id)->first();
+        $npaNxxMaster = NpaNxxMaster::where('id', $id)->first();
         $npaNxxMaster->name = $request->name;
         $npaNxxMaster->isdefault = $request->isdefault;
         $npaNxxMaster->update();
         
         return redirect()->route('npaNxxMaster.index')
-                        ->with('success','npaNxxMaster updated successfully');
+                        ->with('success','NpaNxx Master updated successfully');
     }
     public function show($id)
     {
-        $npaNxxMaster = npaNxxMaster::findorfail($id);
+        $npaNxxMaster = NpaNxxMaster::findorfail($id);
         return redirect()->route('NpaNxxDetail.index',$id);
     }
     /**
@@ -112,8 +113,18 @@ class NpaNxxMasterController extends Controller
      */
     public function destroy($id)
     {
-        $npaNxxMaster = npaNxxMaster::find($id)->delete();
+        $npaNxxMaster = NpaNxxMaster::find($id)->delete();
         return redirect()->route('npaNxxMaster.index')
-                        ->with('success','npaNxxMaster deleted successfully');
+                        ->with('success','NpaNxx Master deleted successfully');
+    }
+    private function getSearch($query)
+    {
+        if ( request('name') != '' )
+        $query = $query->where('name', 'like', '%'.request('name').'%');
+        
+        if ( request('isdefault') != '' )
+        $query = $query->where('isdefault', 'like', '%'.request('isdefault').'%');
+        
+        return $query; 
     }
 }

@@ -5,7 +5,7 @@ namespace App\Libraries;
 use App\Models\SipAccount;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use SocketConnection;
+use App\Libraries\SocketConnection;
 
 class FreeSwitch
 {

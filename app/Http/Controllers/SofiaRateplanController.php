@@ -24,6 +24,8 @@ class SofiaRateplanController extends Controller
             $sofiarateplans = $sofiarateplans->search(request('search'), null, true, true)->distinct();
         }
 
+        $sofiarateplans = $this->getSearch($sofiarateplans);  
+
         $sofiarateplans = $sofiarateplans->paginate($row); //display 10 records
         $operationPermission = [
             'create' => hasPermission(['termination_rateplan_list','termination_rateplan_create']),
@@ -67,7 +69,23 @@ class SofiaRateplanController extends Controller
     public function edit($id)
     {   
         $sofiarateplan = SofiaRateplan::findorfail($id);
+        $planGateway = SofiaPlangateway::get();
         $gateway_ids = $sofiarateplan->sofia_plangateways->pluck('gateway_id');
+
+       // $books = Book::with('author')->get();
+
+   
+
+        // $planGateway2 = array_map( function ($plan) { 
+        //     return $plan['id'];
+        // },$planGateway->gateway->toArray());
+
+        // $planGateway2 = SofiaPlangateway::where([
+        //             ['plan_id','=',$id]
+        //             ])->with('gateway')->get();
+
+        // echo "<pre>";
+        // print_r($planGateway2);exit;
 
         $gateways = Gateway::whereNotIn('id', $gateway_ids)->get();
         return view('sofiaRateplan.edit',compact('sofiarateplan','gateways'));
@@ -85,6 +103,7 @@ class SofiaRateplanController extends Controller
         if(isset($request->gateway_id) && !empty($request->gateway_id))
         {
             SofiaPlangateway::where('plan_id','=',$id)->delete();
+
             foreach ($request->gateway_id as $k) {
                 $sofiaplanGateway = new SofiaPlangateway;
                 $sofiaplanGateway->plan_id = $sofiarateplans->id;
@@ -101,12 +120,16 @@ class SofiaRateplanController extends Controller
 
     public function destroy($id)
     {    
+
         $SofiaRate = SofiaRate::where('plan_id','=',$id)->get();
-        $BillplanOutboundRate = BillplanOutboundRate::where('rateplan_id','=',$id)->first();
+        $BillplanOutboundRate = BillplanOutboundRate::where('rateplan_id',$id)->first();
 
         if (empty($BillplanOutboundRate)) {
-            $SofiaPlangateway = SofiaPlangateway::where('plan_id','=',$id)->delete();
-            $SofiaRate = SofiaRate::where('plan_id','=',$id)->delete();
+            $SofiaPlangateway = SofiaPlangateway::where('plan_id',$id)->delete();
+            $SofiaRate = SofiaRate::where('plan_id',$id)->delete();
+            $SofiaRateplan = SofiaRateplan::find($id)->delete();
+
+            return redirect()->route('sofiaRateplan.index')->with('success','Termination bill plan has been deleted successfully');
         }
         elseif(!empty($BillplanOutboundRate))
         {
@@ -114,7 +137,7 @@ class SofiaRateplanController extends Controller
             return redirect()->route('sofiaRateplan.index')->with('danger','This plan is assign to '.$billplan.' bill plan , so you can not deleted it.');
         }
         
-        return redirect()->route('sofiaRateplan.index')->with('success','Termination bill plan has been deleted successfully');
+        
     }
 
     public function changeStatus($id)
@@ -123,6 +146,17 @@ class SofiaRateplanController extends Controller
         $sofiarateplans->status = $sofiarateplans->status == "INACTIVE" ? "ACTIVE" : "INACTIVE";
         $sofiarateplans->save();
         return redirect()->route('sofiaRateplan.index');
+    }
+
+    private function getSearch($query)
+    {
+        if ( request('plan_name') != '' )
+        $query = $query->where('plan_name', 'like', '%'.request('plan_name').'%');
+        
+        if ( request('status') != '' )
+        $query = $query->where('status', 'like', '%'.request('status').'%');
+        
+        return $query; 
     }
 
 }

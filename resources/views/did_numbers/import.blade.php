@@ -13,7 +13,7 @@
                             <h4 class="page-title"><i class="far fa-building" aria-hidden="true"></i> Import Number Detail</h4>
                         </div>
                         <div class="col-md-6 pull-right mb-1">
-                            <a class="btn btn-primary" href="{{ route('numbers.index') }}"><i class="fa fa-arrow-left"></i></a>
+                            <a class="btn btn-primary" href="{{ route('numbers.index') }}" title="Back"><i class="fa fa-arrow-left"></i></a>
                         </div>
                     </div>
                     <!-- header end-->
@@ -111,7 +111,7 @@
                             <div class="col-lg-4 mb-2 validation_message">
                                 <label for="for-realm" class="form-label">Download sample file</label>
                                 <div class="input-group">                                    
-                                    <a href="{{route('numbers.sample.download')}}">
+                                    <a href="{{route('numbers.sample.download')}}" title="Download">
                                         <span class="input-group-text bg-primary">
                                             <i class="fas fa-download text-white"></i>
                                         </span>
@@ -129,7 +129,7 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-primary float-end" type="submit">Import</button>
+                        <button class="btn btn-primary float-end" type="submit" title="Import Record"> Import</button>
                     </form>
 
                 </div>

@@ -15,10 +15,10 @@
                         </div>
                         <div class="col-md-6 pull-right mb-1">
                             @if ($operationPermission['create'])
-                            <a class="btn btn-success btn-sm bg-success" href="{{ route('numbers.import.create') }}"><i class="fas fa-cloud-upload-alt text-white"></i></a>
-                            <a class="btn btn-primary btn-sm" href="{{ route('numbers.create') }}"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-success btn-sm bg-success" href="{{ route('numbers.import.create') }}" title="Import Number"><i class="fas fa-cloud-upload-alt text-white"></i></a>
+                            <a class="btn btn-primary btn-sm" href="{{ route('numbers.create') }}" title="Add New Number"><i class="fa fa-plus"></i></a>
                             @endif
-                            <a class="btn btn-info btn-sm" data-bs-toggle="collapse" href="#searchSection" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-search"></i></a>
+                            <a class="btn btn-info btn-sm" data-bs-toggle="collapse" href="#searchSection" role="button" aria-expanded="false" aria-controls="collapseExample" title="Advance Search"><i class="fas fa-search"></i></a>
 
                         </div>
                         <div class="collapse @if(request()->query('number_did') != '' || request()->query('number_service_type') != '' || request()->query('number_channel_limit') != '' || request()->query('number_country') != '' || request()->query('number_state') != '' || request()->query('number_area') != '' || request()->query('number_description') != '')show @endif" id="searchSection">
@@ -117,8 +117,8 @@
                                         </div>
                                         <div class="col-lg-3 mb-2 justify-content-around" align="right">
                                             
-                                            <button class="btn btn-secondary m-3 ms-auto" type="button" onclick="resetForm('feildWiseSearchForm')"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                                            <button class="btn btn-info m-3 ms-auto" type="submit"><i class="fas fa-search"></i></button>
+                                            <button class="btn btn-secondary m-3 ms-auto" type="button" onclick="resetForm('feildWiseSearchForm')" title="Reset Form"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                                            <button class="btn btn-info m-3 ms-auto" type="submit" title="Search"><i class="fas fa-search"></i></button>
                                             
                                             
                                         </div>

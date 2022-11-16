@@ -21,15 +21,18 @@ class OriginationBillPlanController extends Controller
         if (request('search') != '') {
             $OriginationBillPlans = $OriginationBillPlans->search(request('search'), null, true, true)->distinct();
         }
+        $OriginationBillPlans = $this->getSearch($OriginationBillPlans); 
 
+    
         $OriginationBillPlans = $OriginationBillPlans->paginate($row); //display 10 records
+        $OriginationRatePlans = OriginationRatePlan::get();
         $operationPermission = [
             'create' => hasPermission(['origination_bill_list','origination_bill_create']),
             'update' => hasPermission(['origination_bill_list','origination_bill_update']),
             'delete' => hasPermission(['origination_bill_list','origination_bill_delete'])
         ]; 
 
-        return view('originationBillPlan.index',compact('OriginationBillPlans', 'operationPermission'));
+        return view('originationBillPlan.index',compact('OriginationBillPlans', 'operationPermission','OriginationRatePlans'));
     }
 
     public function create()
@@ -77,5 +80,22 @@ class OriginationBillPlanController extends Controller
         $OriginationBillPlan->origination_enable = $OriginationBillPlan->origination_enable == "INACTIVE" ? "ACTIVE" : "INACTIVE";
         $OriginationBillPlan->save();
         return redirect()->route('originationBillPlan.index');
+    }
+    
+    private function getSearch($query)
+    {
+        if ( request('bill_plan_type') != '' )
+        $query = $query->where('bill_plan_type', 'like', '%'.request('bill_plan_type').'%');
+        
+        if ( request('bill_plan_name') != '' )
+        $query = $query->where('bill_plan_name', 'like', '%'.request('bill_plan_name').'%');
+
+        if ( request('origination_rate_plan') != '' )
+        $query = $query->where('origination_rate_plan', 'like', '%'.request('origination_rate_plan').'%');
+
+        if ( request('origination_enable') != '' )
+        $query = $query->where('origination_enable', 'like', '%'.request('origination_enable').'%');
+        
+        return $query; 
     }
 }

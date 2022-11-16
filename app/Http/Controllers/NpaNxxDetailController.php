@@ -15,7 +15,7 @@ class NpaNxxDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         $row = 10;
         if (request('row') != '')
@@ -27,19 +27,20 @@ class NpaNxxDetailController extends Controller
             $NpaNxxDetail = $NpaNxxDetail->search(request('search'), null, true, true)->distinct();
         }
 
+        $NpaNxxDetail = $this->getSearch($NpaNxxDetail);  
+
         $operationPermission = [
             'import' => hasPermission(['npa_nxx_detail_list','npa_nxx_detail_import']),
             'delete' => hasPermission(['npa_nxx_detail_list','npa_nxx_detail_delete'])
         ];
         $NpaNxxDetail = $NpaNxxDetail->paginate($row); //display 10 records
-        return view('NpaNxxDetail.index',compact('NpaNxxDetail', 'operationPermission'));    
+        return view('NpaNxxDetail.index',compact('NpaNxxDetail', 'operationPermission','id'));    
     }
    
     public function import(Request $request,$id)
     {
         return view('NpaNxxDetail.import',compact('id'));
     }
-   
    
     /**
      * Store a newly created resource in storage.
@@ -88,7 +89,6 @@ class NpaNxxDetailController extends Controller
 
         return redirect()->route('NpaNxxDetail.index',$id)
         ->with('success','NpaNxxDetail import successfully');
-
     }
     public function downloadfile()
     {
@@ -105,7 +105,29 @@ class NpaNxxDetailController extends Controller
     public function destroy($id)
     {
         $NpaNxxDetail = NpaNxxDetail::find($id)->delete();
-        return redirect()->route('npaNxxMaster.index')
+        return redirect()->route('NpaNxxDetail.index',$id)
                         ->with('success','NpaNxxDetail deleted successfully');
+    }
+    private function getSearch($query)
+    {
+        if ( request('state') != '' )
+        $query = $query->where('state', 'like', '%'.request('state').'%');
+        
+        if ( request('npanxx') != '' )
+        $query = $query->where('npanxx', 'like', '%'.request('npanxx').'%');
+
+        if ( request('lata') != '' )
+        $query = $query->where('lata', 'like', '%'.request('lata').'%');
+
+        if ( request('zipcode') != '' )
+        $query = $query->where('zipcode', 'like', '%'.request('zipcode').'%');
+
+        if ( request('npa') != '' )
+        $query = $query->where('npa', 'like', '%'.request('npa').'%');
+
+        if ( request('nxx') != '' )
+        $query = $query->where('nxx', 'like', '%'.request('nxx').'%');
+
+        return $query; 
     }
 }

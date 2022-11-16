@@ -23,11 +23,10 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|unique:user,email,'.$this->id,
+            'email' => 'required|email|unique:user,email,'.$this->id,
             'phoneno' => 'required|unique:user,phoneno,'.$this->id,
         ];
     }

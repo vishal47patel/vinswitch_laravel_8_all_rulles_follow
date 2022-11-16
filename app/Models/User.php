@@ -17,7 +17,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, SearchableTrait;
 
     protected $table = 'user';
-
+    protected $primaryKey = 'id';
     /**
      * The attributes that are mass assignable.
      *
@@ -33,7 +33,8 @@ class User extends Authenticatable
         'role',
         'name',
         'superuser',
-        'username'
+        'username',
+        'tenant_id'
     ];
 
     /**
@@ -43,7 +44,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        //'remember_token',
         'deleted_at'
     ];
 
@@ -90,4 +91,10 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id', 'id');
 
     }
+    /**
+     * Get the user that owns the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+   
 }

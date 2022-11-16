@@ -11,6 +11,8 @@ class AgentBillplan extends Model
 
     protected $table = 'agent_billplan';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'id',
         'agent_id',

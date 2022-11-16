@@ -34,7 +34,7 @@ if(in_array('vendor-settings', $previous_route_array) || in_array('vendor-settin
                         </div>
                         <div class="col-md-6 pull-right mb-1">
                             @if ($operationPermission['create'])
-                            <a class="btn btn-primary btn-sm" href="{{ route('vendors.create') }}"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-primary btn-sm" href="{{ route('vendors.create') }}" title="Add New Vendor"><i class="fa fa-plus"></i></a>
                             @endif
                             <!-- <a class="btn btn-info btn-sm" data-bs-toggle="collapse" href="#searchSection" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-search"></i></a> -->
                         </div>
@@ -51,8 +51,8 @@ if(in_array('vendor-settings', $previous_route_array) || in_array('vendor-settin
                                         </div>
 
                                         <div class="col-lg-6 mb-2 justify-content-around" align="right">
-                                            <button class="btn btn-secondary m-3 ms-auto" type="button" onclick="resetForm('feildWiseSearchForm')"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                                            <button class="btn btn-info m-3 ms-auto" type="submit"><i class="fas fa-search"></i></button>
+                                            <button class="btn btn-secondary m-3 ms-auto" type="button" onclick="resetForm('feildWiseSearchForm')" title="Reset Form"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                                            <button class="btn btn-info m-3 ms-auto" type="submit" title="Search"><i class="fas fa-search"></i></button>
                                         </div>
                                     </div>
                                 </form>
@@ -88,14 +88,13 @@ if(in_array('vendor-settings', $previous_route_array) || in_array('vendor-settin
                             <tr>
                                 <td class="id-text-left">{{ ($vendors->currentpage()-1) * $vendors->perpage() + $key + 1 }}</td>
                                 <td>{{ $vendor->vendor_name }}</td>
-                                <!--<td>{{ $vendor->did_type }}</td>-->
                                 <td class="text-center">
                                     <a onclick="return confirm('Are you sure you want to Update status?');" href="{{route('vendors.update.status', ['id' => $vendor->id, 'column' => 'status', 'value' => $vendor->status])}}" title="Change Status">
                                         <span @if($vendor->status == 'DISABLE') class="badge badge-soft-danger" @else class="badge badge-soft-success" @endif >{{ $vendor->status }}</span>
                                     </a>
                                 </td>
                                 <td>{{ $vendor->priority }}</td>
-                                <td><a href="{{ route('vendors.index',['vendor_id' => $vendor->id]) }}"><i class="fa fa-cog" aria-hidden="true">{{ $vendor->id }}</i></td>
+                                <td><a href="{{ route('vendors.index',['vendor_id' => $vendor->id]) }}" title="Open Vendor Setting"><i class="fa fa-cog" aria-hidden="true">{{ $vendor->id }}</i></td>
                                 <td class="action-text-left">
 
                                     @if ($operationPermission['update']) <a href="{{ route('vendors.edit',$vendor->id) }}"><i class="fa-solid fa-pen-to-square" title="Edit"></i></a> @endif
@@ -120,7 +119,7 @@ if(in_array('vendor-settings', $previous_route_array) || in_array('vendor-settin
                         </div>
                         <div class="col-md-6 pull-right mb-1">                            
                             @if ($operationPermission['create_setting'])
-                            <a class="btn btn-primary btn-sm" href="{{ route('vendor.settings.create',$record->vendor_id) }}"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-primary btn-sm" href="{{ route('vendor.settings.create',$record->vendor_id) }}" title="Add New Vendor Setting"><i class="fa fa-plus"></i></a>
                             @endif
                         </div>
                     </div>

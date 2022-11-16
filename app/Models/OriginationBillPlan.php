@@ -35,6 +35,6 @@ class OriginationBillPlan extends Model
     // relationship 
     public function originationBillPlan()
     {
-        return $this->hasOne(OriginationRatePlan::class,"id",'id');
+        return $this->hasOne(OriginationRatePlan::class,"id","origination_rate_plan");
     }
 }

@@ -26,14 +26,19 @@ class ServiceType extends Model
          * @var array
          */
         'columns' => [
-            'service_type.rate_plan_id' => 1,
-            
+            'origination_rate_plan.rate_plan_id' => 1,  
         ],
     ];
+    
     //relationship 
     public function servicetype()
     {
-        return $this->belongsTo(OriginationRatePlan::class, 'rate_plan_id', 'id');
+        return $this->belongsTo(OriginationRatePlan::class, 'rate_plan_id');
 
     }
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_type', 'id');
+    }
+   
 }

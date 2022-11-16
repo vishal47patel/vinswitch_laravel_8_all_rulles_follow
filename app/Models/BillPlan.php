@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Voidgraphics\Searchable\SearchableTrait;
-
+use Illuminate\Support\Facades\Auth;
 class BillPlan extends Model
 {
     use HasFactory, SearchableTrait;
@@ -54,11 +54,7 @@ class BillPlan extends Model
         'columns' => [
             'bill_plan.name' => 1,
             'bill_plan.type' => 1,
-            'bill_plan.currency' => 1,
-            'bill_plan.monthly_payment' => 1,
-            'bill_plan.monthly_mins' => 2,
             'bill_plan.status' => 1,
-            'bill_plan.description' => 10,
         ],
     ];
 
@@ -99,18 +95,28 @@ class BillPlan extends Model
             }
         }
     }
+
+    public function getactiveBillplan()
+    {
+        if (isset(Auth::user()->role) && Auth::user()->role == 'AGENT') {
+            $user = User::where('id','=',Auth::user()->id)->first();
+            $agent_billplan = AgentBillplan::where('agent_id','=',$user->tenant_id)->get();
+            $ids = array_column($agent_billplan, 'billplan_id');
+            $data = BillPlan::select('id','name')->where('id','=',$ids)->where('status','=','ACTIVE')->get();
+
+        }else{
+            $data = BillPlan::select('id','name')->where('status','=','ACTIVE')->get();  
+        }
+        
+        return $data;
+    }
     
     //relationships 
-    public function billplans()
-    {
-        return $this->belongsToMany(BillPlan::class, 'billplan_outboundRate', 'billplan_id', 'rateplan_id');
-
-    }
-
     public function sofiarateplans()
     {
          return $this->belongsToMany(SofiaRateplan::class, 'billplan_outboundRate','billplan_id','rateplan_id');
 
-    }
+    } 
+   
  
 }

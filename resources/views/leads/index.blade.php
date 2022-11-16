@@ -15,7 +15,7 @@
                         </div>
                          <div class="col-md-6 pull-right mb-1">
                             <a class="btn btn-primary btn-sm" onclick="show_div();" title="Import"><i class="fa fa-upload" id="import"></i></a>
-                            <a class="btn btn-primary btn-sm" href="{{ route('leads.export') }}" title="Export"><i class="fa fa-download"></i></a>
+                            <a class="btn btn-secondary btn-sm" href="{{ route('leads.export') }}" title="Export"><i class="fa fa-download"></i></a>
                         </div>
                     </div>
                     <!-- header end-->

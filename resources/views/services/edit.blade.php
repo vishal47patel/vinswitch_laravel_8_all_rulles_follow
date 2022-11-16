@@ -13,7 +13,7 @@
                              <h4 class="page-title"><i class="fa fa-paste" aria-hidden="true"></i>  Add New Service Type</h4>
                         </div>
                          <div class="col-md-6 pull-right mb-1">
-                            <a class="btn btn-primary" href="{{ route('services.index') }}"><i class="fa fa-arrow-left"></i></a>
+                            <a class="btn btn-primary" href="{{ route('services.index') }}" title="Back"><i class="fa fa-arrow-left"></i></a>
                         </div>
                     </div>
                     <!-- header end-->
@@ -24,7 +24,7 @@
                             <div class="col-lg-6 mb-2">
                                 <label class="form-label">Service Type<span class="text-red"> *</span></label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fa fa-map-signs" aria-hidden="true"></i></span>
+                                    <span class="input-group-text"><i class="far fa-keyboard" aria-hidden="true"></i></span>
                                     <input type="text" class="form-control" name="service_type" id="service_type" placeholder="Enter Service Type" value="{{ $service->service_type }}" autocomplete = off >
                                 </div>
                                 @error('service_type')<p class="validation_error">{{ $message }} </p>@enderror
@@ -32,13 +32,13 @@
                             <div class="col-lg-6 mb-2">
                                 <label class="form-label">Service Description<span class="text-red"> *</span></label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fa fa-map-signs" aria-hidden="true"></i></span>
+                                    <span class="input-group-text"><i class="fab fa-odnoklassniki" aria-hidden="true"></i></span>
                                     <input type="text" class="form-control" name="service_description" id="service_description" placeholder="Enter Service Description" value="{{ $service->service_description }}" autocomplete = off >
                                 </div>
                                 @error('service_description')<p class="validation_error">{{ $message }} </p>@enderror
                             </div>
                         </div>
-                        <button class="btn btn-primary" type="submit">Submit</button>
+                        <button class="btn btn-primary float-end" type="submit">Update</button>
                     </form>
                         
                 </div> 

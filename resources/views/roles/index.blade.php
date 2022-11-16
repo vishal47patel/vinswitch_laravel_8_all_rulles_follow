@@ -12,10 +12,30 @@
                              <h4 class="page-title"><i class="fa fa-cog" aria-hidden="true"></i> Role List</h4>
                         </div>
                          <div class="col-md-6 pull-right mb-1">
-                             @if ($operationPermission['create'])
-                                    <a class="btn btn-primary btn-sm" href="{{ route('roles.create') }}" ><i class="fa fa-plus"></i></a>
-                                @endif
+                            @if ($operationPermission['create'])
+                            <a class="btn btn-primary btn-sm" href="{{ route('roles.create') }}" ><i class="fa fa-plus"></i></a>
+                            @endif
+                            <a class="btn btn-info btn-sm" data-bs-toggle="collapse" href="#searchSection" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-search"></i></a>
                         </div>
+                        <!-- search start -->
+                        <div class="collapse @if(request()->query('name') != '' )show @endif" id="searchSection">
+                            <form action="{{ route('roles.index') }}" method="GET" name="feildWiseSearchForm" class="feildWiseSearchForm" id="feildWiseSearchForm">    
+                            <div class="row">
+                                <div class="col-md-4 mb-2 ">
+                                    <label for="for-gatway" class="form-label">Name</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" value="{{ request()->query('name') }}" autocomplete=off>
+                                    </div>
+                                </div>
+
+                                <div class="col mt-1 justify-content-around" >
+                                    <button class="btn btn-info m-3 ms-auto btn-sm" type="submit">serach</button>
+                                    <button class="btn btn-secondary m-3 ms-auto btn-sm" type="button" onclick="resetForm('feildWiseSearchForm')"><i class="fa fa-refresh" aria-hidden="true"></i></button>   
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                        <!-- search end -->
                     </div>
                     <!-- header end-->
 

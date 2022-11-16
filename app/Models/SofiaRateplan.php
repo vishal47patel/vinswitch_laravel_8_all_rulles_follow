@@ -27,8 +27,6 @@ class SofiaRateplan extends Model
     protected $searchable = [
         'columns' => [
             'sofia_rateplan.plan_name' => 1,
-            'sofia_rateplan.cc' => 1,
-            'sofia_rateplan.max_call_length' => 1,
             'sofia_rateplan.status' => 1,
         ],
     ];

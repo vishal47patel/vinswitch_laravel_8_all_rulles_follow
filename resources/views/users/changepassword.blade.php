@@ -16,6 +16,7 @@
                         </div>
                     </div>
                     <!-- header end-->
+                    @include('layouts.flash_message')
                         
                     <form action="{{ route('users.submitchangepassword') }}" method="POST" id="check_validation">
                     @csrf

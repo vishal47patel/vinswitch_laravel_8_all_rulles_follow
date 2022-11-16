@@ -6,11 +6,6 @@
     @include('layouts.head')
     <!-- header end -->
 
-    <style>
-        #wrapper {
-            overflow: auto !important;
-        }
-    </style>
 </head>
 
 <body class="loading" data-sidebar-icon="twotones">
@@ -144,4 +139,3 @@
 </body>
 
 </html>
-

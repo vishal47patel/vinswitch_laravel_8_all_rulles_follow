@@ -1,5 +1,7 @@
-
 <?php
+namespace App\Libraries;
+
+namespace App\Libraries;
 
 class Buffer {
 	private $content;

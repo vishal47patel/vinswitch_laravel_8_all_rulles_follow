@@ -8,6 +8,11 @@
     <div class="mb-3">
         <label for="emailaddress" class="form-label">Email address</label>
         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email" autofocus placeholder="Enter your email">
+        @error('email')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+        @enderror
 
     </div>
 
@@ -18,6 +23,11 @@
             <div class="input-group-text" data-password="false">
                 <span class="password-eye"></span>
             </div>
+            @error('password')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+            @enderror
         </div>
     </div>
 

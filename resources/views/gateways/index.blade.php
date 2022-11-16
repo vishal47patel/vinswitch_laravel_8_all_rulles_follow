@@ -14,9 +14,9 @@
                         </div>
                         <div class="col-md-6 pull-right mb-1">
                             @if ($operationPermission['create'])
-                            <a class="btn btn-primary btn-sm" href="{{ route('gateways.create') }}"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-primary btn-sm" href="{{ route('gateways.create') }}" title="Add New Gateway"><i class="fa fa-plus"></i></a>
                             @endif
-                            <a class="btn btn-info btn-sm" data-bs-toggle="collapse" href="#searchSection" role="button" aria-expanded="false" aria-controls="collapseExample"><i class="fas fa-search"></i></a>
+                            <a class="btn btn-info btn-sm" data-bs-toggle="collapse" href="#searchSection" role="button" aria-expanded="false" aria-controls="collapseExample" title="Advance Search"><i class="fas fa-search"></i></a>
                         </div>
                         <div class="collapse @if(request()->query('gateway_name') != '' || request()->query('hostname') != '' || request()->query('register') != '')show @endif" id="searchSection">
                             <div class="card card-body">
@@ -56,8 +56,8 @@
 
                                         <div class="col mb-2 justify-content-around" align="right">
                                            
-                                                <button class="btn btn-secondary m-3 ms-auto" type="button" onclick="resetForm('feildWiseSearchForm')"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                                                <button class="btn btn-info m-3 ms-auto" type="submit"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-secondary m-3 ms-auto" type="button" onclick="resetForm('feildWiseSearchForm')" title="Reset Form"><i class="fa fa-refresh" aria-hidden="true" ></i></button>
+                                                <button class="btn btn-info m-3 ms-auto" type="submit" title="Search"><i class="fas fa-search"></i></button>
                                                 
                                             
                                         </div>
@@ -100,15 +100,15 @@
                                 <td>{{ $gateway->expire_seconds }}</td>
                                 <td>{{ $gateway->retry_seconds }}</td>
                                 @if($gateway->register == "TRUE")
-                                <td><a href="{{ route('gateways.changeType',$gateway->id) }}"><span class="badge badge-soft-success" >{{$gateway->register}}</span></a></td>
+                                <td><a href="{{ route('gateways.changeType',$gateway->id) }}" title="Change Register Status"><span class="badge badge-soft-success" >{{$gateway->register}}</span></a></td>
                                 @else
-                                <td><a href="{{ route('gateways.changeType',$gateway->id) }}"><span class="badge badge-soft-danger" >{{$gateway->register}}</span></a></td>
+                                <td><a href="{{ route('gateways.changeType',$gateway->id) }}" title="Change Register Status"><span class="badge badge-soft-danger" >{{$gateway->register}}</span></a></td>
                                 @endif
                                 <td>{{ $gateway->hostname }}</td>
                                 @if($gateway->outbound_default == "YES")
-                                <td><a href="{{ route('gateways.changeDefault',$gateway->id) }}"><span class="badge badge-soft-success" >{{$gateway->outbound_default}}</span></a></td>
+                                <td><a href="{{ route('gateways.changeDefault',$gateway->id) }}" title="Change Default Outbound Status"><span class="badge badge-soft-success" >{{$gateway->outbound_default}}</span></a></td>
                                 @else
-                                <td><a href="{{ route('gateways.changeDefault',$gateway->id) }}"><span class="badge badge-soft-danger" >{{$gateway->outbound_default}}</span></a></td>
+                                <td><a href="{{ route('gateways.changeDefault',$gateway->id) }}" title="Change Default Outbound Status"><span class="badge badge-soft-danger" >{{$gateway->outbound_default}}</span></a></td>
                                 @endif
                                 <td class="action-text-left">
                                     @if ($operationPermission['update']) <a href="{{ route('gateways.edit',$gateway->id) }}"><i class="fa-solid fa-pen-to-square" title="Edit"></i></a> @endif

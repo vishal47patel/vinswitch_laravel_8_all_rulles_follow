@@ -53,7 +53,19 @@ class GatewayController extends Controller
         if ($gateways->count() == 0) {
             $input['outbound_default'] = 'YES';
         }
-
+        $input['username'] = (!isset($input['username']) || $input['username'] == null) ? '' : $input['username'];
+        $input['password'] = (!isset($input['password']) || $input['password'] == null) ? '' : $input['password'];
+        $input['auth_username'] = (!isset($input['auth_username']) || $input['auth_username'] == null) ? '' : $input['auth_username'];
+        $input['realm'] = (!isset($input['realm']) || $input['realm'] == null) ? '' : $input['realm'];
+        $input['from_user'] = (!isset($input['from_user']) || $input['from_user'] == null) ? '' : $input['from_user'];
+        $input['from_domain'] = (!isset($input['from_domain']) || $input['from_domain'] == null) ? '' : $input['from_domain'];
+        $input['register_proxy'] = (!isset($input['register_proxy']) || $input['register_proxy'] == null) ? '' : $input['register_proxy'];
+        $input['outbound_proxy'] = (!isset($input['outbound_proxy']) || $input['outbound_proxy'] == null) ? '' : $input['outbound_proxy'];
+        $input['ping'] = (!isset($input['ping']) || $input['ping'] == null) ? '' : $input['ping'];
+        $input['caller_id_in_from'] = (!isset($input['caller_id_in_from']) || $input['caller_id_in_from'] == null) ? '' : $input['caller_id_in_from'];
+        $input['channels'] = (!isset($input['channels']) || $input['channels'] == null) ? '' : $input['channels'];
+        $input['hostname'] = (!isset($input['hostname']) || $input['hostname'] == null) ? '' : $input['hostname'];
+        $input['outbound_default'] = (!isset($input['outbound_default']) || $input['outbound_default'] == null) ? '' : $input['outbound_default'];
         $gateway = Gateway::create($input);
 
 

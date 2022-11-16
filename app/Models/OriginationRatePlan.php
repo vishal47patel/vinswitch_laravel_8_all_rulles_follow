@@ -14,7 +14,7 @@ class OriginationRatePlan extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name','service_type','did_price','setup_fee','e911_price','cnam_price','inbound_min_rate','inbound_channel_limit','description'
+        'name','description'
     ];
 
     protected $searchable = [
@@ -27,12 +27,18 @@ class OriginationRatePlan extends Model
          */
         'columns' => [
             'origination_rate_plan.name' => 1,
-            'origination_rate_plan.service_type' => 1,
+            'origination_rate_plan.description' => 10,
+            'services.service_type' => 5,
+        ],
+        'joins' => [
+            'service_type' => ['origination_rate_plan.id','service_type.rate_plan_id'],
+            'services' => ['service_type.service_type','services.id'],
         ],
     ];
-
-    public function servicetype()
-    {
-        return $this->belongTo(services::class,'service_type');
+   
+    public function service_types() {
+        return $this->hasMany(ServiceType::class, 'rate_plan_id');
     }
+   
+    
 }

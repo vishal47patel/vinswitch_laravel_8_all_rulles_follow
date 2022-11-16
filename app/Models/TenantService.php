@@ -11,6 +11,8 @@ class TenantService extends Model
 
     protected $table = 'tenant_service';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'id',
         'account_number',

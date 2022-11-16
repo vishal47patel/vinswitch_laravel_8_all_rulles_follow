@@ -11,6 +11,7 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\PasswordStoreRequest;
+use App\Http\Requests\AgentResetPasswordRequest;
 use Session;
 
 class UserController extends Controller
@@ -32,9 +33,10 @@ class UserController extends Controller
             'update' => hasPermission(['user_list','user_update']),
             'delete' => hasPermission(['user_list','user_delete'])
         ];
-        
+        $users = $this->getSearch($users);
         $users = $users->paginate($row); //display 10 records
-        return view('users.index',compact('users','operationPermission'));    
+        $roles = Role::where('name','<>','superadmin')->get();
+        return view('users.index',compact('users','operationPermission','roles'));    
     }
 
     public function create()
@@ -95,7 +97,7 @@ class UserController extends Controller
         $input = $request->except(['_token','_method']);
         User::where('id',$user->id)->update($input);
 
-        return redirect()->route('users.index')
+        return redirect()->route('users.editprofile')
                         ->with('success','Profile has been updated successfully!');
        
     }
@@ -122,7 +124,7 @@ class UserController extends Controller
                 $input = $request->except(['password','confirm_password','current_password','_token','_method']);
                 $input['password'] = Hash::make($request->password);
                 User::where('id',$user->id)->update($input);
-                return redirect()->route('users.index')->with('success','Password has been updated successfully!');
+                return redirect()->route('users.changepassword')->with('success','Password has been updated successfully!');
             }
         } 
         else {
@@ -138,6 +140,20 @@ class UserController extends Controller
         Session::flush();
         Auth::logout();
         return Redirect()->route('login');
+    }
+
+    private function getSearch($query)
+    {
+        if ( request('first_name') != '' )
+        $query = $query->where('first_name', 'like', '%'.request('first_name').'%');
+
+        if ( request('email') != '' )
+        $query = $query->where('email', 'like', '%'.request('email').'%');
+        
+        if ( request('role_id') != '' )
+        $query = $query->where('role_id', 'like', '%'.request('role_id').'%');
+        
+        return $query; 
     }
 
    
